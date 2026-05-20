@@ -95,7 +95,7 @@ exports.stripeWebhook = async (req, res) => {
       where: { cartId: cart.id },
     });
 
-    console.log("✅ ORDER CREATED SUCCESSFULLY");
+    
 
     return res.json({ received: true });
 

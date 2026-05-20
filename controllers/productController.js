@@ -137,8 +137,7 @@ exports.getProductById = async (req, res) => {
 
 // 🟢 UPDATE PRODUCT
 exports.updateProduct = async (req, res) => {
-  console.log("BODY:", req.body);
-  console.log("FILE:", req.file);
+ 
 
   try {
     const {
