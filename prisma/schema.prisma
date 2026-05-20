@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id          String   @id @default(cuid())
+  name        String
+  email       String   @unique
+  password    String?  // optional
+  image       String   @default("https://cdn-icons-png.flaticon.com/512/149/149071.png")
+
+  provider    String   @default("local") // local أو google
+  providerId  String?  // id من Google
+  cart          Cart?
+  resetToken  String?
+  resetTokenExpiry DateTime?
+  role        String   @default("user")
+  orders      Order[]
+  createdAt   DateTime @default(now())
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  image       String
+  products  Product[]
+  createdAt DateTime  @default(now())
+}
+
+model Product {
+  id          String    @id @default(cuid())
+  name        String
+  price       Float
+  description String
+  image       String
+  stock       Int       @default(0)
+
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id])
+
+  orderItems  OrderItem[]   // 🔥 هذا السطر المهم
+  cartItems CartItem[]
+
+  createdAt   DateTime  @default(now())
+}
+
+model Order {
+  id               String   @id @default(cuid())
+
+  userId           String
+  user             User     @relation(fields: [userId], references: [id])
+
+  totalPrice       Float
+  status           String   @default("pending")
+
+  stripePaymentId  String?   // ⭐️ ADD THIS (مهم)
+
+  items            OrderItem[]
+
+  createdAt        DateTime @default(now())
+}
+model OrderItem {
+  id        String   @id @default(cuid())
+
+  productId String
+  product    Product  @relation(fields: [productId], references: [id])
+
+  quantity  Int
+  price     Float
+
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id])
+}
+model Cart {
+  id        String     @id @default(cuid())
+
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id])
+
+  items     CartItem[]
+
+  createdAt DateTime   @default(now())
+  
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+
+  quantity  Int      @default(1)
+
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id])
+}
