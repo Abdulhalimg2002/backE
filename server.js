@@ -9,7 +9,7 @@ const app = express();
 app.use(
   cors({
     origin: ["http://localhost:3001",
-      "https://e-commersss.vercel.app/",
+      "https://e-commersss.vercel.app",
     ],
     
     credentials: true,
