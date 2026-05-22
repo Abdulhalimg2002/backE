@@ -18,13 +18,15 @@ const sendToken = (res, user) => {
     { expiresIn: "7d" }
   );
 
-res.cookie("token", token, {
-  httpOnly: true,
-  secure: true,
-  sameSite: "none", // 🔥 أو none (إذا اشتغل مشاكل)
-  path: "/",
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-});
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+
+  res.setHeader("Authorization", `Bearer ${token}`); // 👈 ADD THIS
 
   return token;
 };
