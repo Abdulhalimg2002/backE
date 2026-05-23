@@ -132,7 +132,7 @@ exports.forgotPassword = async (req, res) => {
       },
     });
 
-    const link = `http://localhost:3001/reset-password/${resetToken}`;
+    const link = `https://e-commersss.vercel.app/reset-password/${resetToken}`;
 
     await sendEmail(email, "Reset Password", htmlTemplate(link));
 
@@ -235,9 +235,9 @@ exports.googleCallback = async (req, res) => {
     sendToken(res, user);
 
     if (user.role === "admin") {
-      return res.redirect("http://localhost:3001/dashboard");
+      return res.redirect("https://e-commersss.vercel.app/dashboard");
     } else {
-      return res.redirect("http://localhost:3001/store");
+      return res.redirect("https://e-commersss.vercel.app/store");
     }
 
   } catch (err) {
